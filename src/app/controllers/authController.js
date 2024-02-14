@@ -145,18 +145,17 @@ router.post('/forgot-password', async (req, res) => {
         const dirTemplate = path.resolve('./src/resources/mail/auth/forgot_password.hbs');
         const templateSource = fs.readFileSync(dirTemplate, 'utf8');
         const template = hbsTemplate.compile(templateSource);
-        console.log('\ntemplate=', template);
 
         const data = {
             subject: 'Redefinição de Senha',
-            greeting: 'Olá!',
-            message: 'Você solicitou a redefinição de senha. Siga o link abaixo para redefinir sua senha. ' + token
+            greeting: `Olá! ${user.name}`,
+            message: `Você solicitou a redefinição de senha. Siga o link abaixo para redefinir sua senha. Token: ${token}`
         };
 
         // Compilar o template com os dados
         const html = template(data);
 
-        console.log(html);
+        // console.log(html);
 
         const mailOptions = {
             from: 'natanoliveirati@gmail.com',
@@ -167,7 +166,7 @@ router.post('/forgot-password', async (req, res) => {
 
         mailer.sendMail(mailOptions, function (error, info) {
             if (error) {
-                // console.error('Erro ao enviar e-mail:', error);
+                console.error('Erro ao enviar e-mail:', error.response);
                 res.status(500).send({ error: 'Erro ao enviar e-mail.' });
             } else {
                 // console.log('E-mail enviado:', info);
