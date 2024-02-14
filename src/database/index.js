@@ -8,10 +8,10 @@ const mongodb_password = process.env.mongodb_password
 const mongodb_database = process.env.mongodb_database
 const mongodb_cluster = process.env.mongodb_cluster
 
-const uri = `mongodb+srv://${mongodb_user}:${mongodb_password}@${mongodb_cluster}.qgv32c4.mongodb.net/${mongodb_database}?retryWrites=true&w=majority`;
+const uri = `mongodb+srv://${mongodb_user}:${mongodb_password}@${mongodb_cluster}.qgv32c4.mongodb.net/${mongodb_database}?retryWrites=true&w=majority`
 
-// const clientOptions = { serverApi: { version: '1', strict: true, deprecationErrors: true } };
-const clientOptions = {}
+const clientOptions = { serverApi: { version: '1', strict: true, deprecationErrors: true } }
+// const clientOptions = {}
 
 async function run() {
 
@@ -53,17 +53,18 @@ async function run() {
     try {
 
         // Create a Mongoose client with a MongoClientOptions object to set the Stable API version
-        await mongoose.connect(uri, clientOptions);
-        await mongoose.connection.db.admin().command({ ping: 1 });
-        console.log("🎲 Pingou sua implantação. Você se conectou com sucesso ao MongoDB! 🛢️");
+        await mongoose.connect(uri, clientOptions)
+        mongoose.set('debug', true)
+        await mongoose.connection.db.admin().command({ ping: 1 })
+        console.log("🎲 Pingou sua implantação. Você se conectou com sucesso ao MongoDB! 🛢️")
 
         clearInterval(loadingInterval);
     } finally {
         // Ensures that the client will close when you finish/error
         clearInterval(loadingInterval);
-        await mongoose.disconnect();
+        // await mongoose.disconnect()
     }
 }
-run().catch(console.dir);
+run().catch(console.dir)
 
 module.exports = mongoose

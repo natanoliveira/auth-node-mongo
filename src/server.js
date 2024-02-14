@@ -14,7 +14,9 @@ const PORT_SERVER = 3000
 //     res.send({ "message": "ok" })
 // })
 
-require('./controllers/authController')(app)
+// require('./app/controllers/authController')(app)
+// require('./app/controllers/projetcController')(app)
+require('./app/controllers/index')(app)
 
 app.listen(PORT_SERVER, () => {
     console.log(`🖥️  Servidor rodando em: http://localhost:${PORT_SERVER} 🚪`)
