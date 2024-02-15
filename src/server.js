@@ -38,4 +38,5 @@ require('./app/controllers/index')(app)
 
 app.listen(PORT_SERVER, () => {
     console.log(`🖥️  Servidor rodando em: http://localhost:${PORT_SERVER} 🚪`)
+    console.log(`❌ Para finalizar o servidor utilize: ctrl/cmd + c 🛫`)
 })

@@ -56,7 +56,7 @@ async function run() {
         await mongoose.connect(uri, clientOptions)
         mongoose.set('debug', true)
         await mongoose.connection.db.admin().command({ ping: 1 })
-        console.log("🎲 Pingou sua implantação. Você se conectou com sucesso ao MongoDB! 🛢️")
+        console.log("\n🎲 Pingou sua implantação. Você se conectou com sucesso ao MongoDB! 🛢️")
 
         clearInterval(loadingInterval);
     } finally {
