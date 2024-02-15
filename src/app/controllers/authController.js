@@ -9,6 +9,7 @@ const hbsTemplate = require('handlebars')
 
 // Configs
 const authConfig = require('../../config/auth.json')
+const mailerConfig = require('../../config/mail.json')
 const mailer = require('../../modules/mailer')
 
 // Modelo
@@ -98,6 +99,9 @@ router.post('/forgot-password', async (req, res) => {
     const { email } = req.body
 
     try {
+
+        // req.setTimeout(60000);
+
         const user = await User.findOne({ email: email })
 
         if (!user) {
@@ -119,43 +123,19 @@ router.post('/forgot-password', async (req, res) => {
             }
         })
 
-        // Vamos tentar enviar o e-mail
-        // console.log(token, now)
-        // mailer.sendMail({
-        //     from: 'natanoliveirati@gmail.com',
-        //     to: email,
-        //     subject: 'Forgot password!',
-        //     html: '<h1>Hello world!</h1>'
-        // }, function (error, info) {
-        //     if (error) {
-        //         console.error('Erro ao enviar e-mail:', error.response);
-        //         // Mensagemd e erro do sendgrid
-        //         const errorsSG = error.response.body.errors
-        //         let linha = '';
-        //         errorsSG.forEach(element => {
-        //             linha += element.message + '\n'
-        //         });
-        //         res.status(error.code).send({ message: errorsSG })
-        //     } else {
-        //         console.log('E-mail enviado:', info.statusMessage);
-        //         res.status(info.statusCode).send({ message: "E-mail enviado para " + email })
-        //     }
-        // })
-
+        // 2 - Sendgrid
         const dirTemplate = path.resolve('./src/resources/mail/auth/forgot_password.hbs');
         const templateSource = fs.readFileSync(dirTemplate, 'utf8');
         const template = hbsTemplate.compile(templateSource);
 
         const data = {
-            subject: 'Redefinição de Senha',
+            subject: `Redefinição de Senha ${token}`,
             greeting: `Olá! ${user.name}`,
             message: `Você solicitou a redefinição de senha. Siga o link abaixo para redefinir sua senha. Token: ${token}`
         };
 
         // Compilar o template com os dados
         const html = template(data);
-
-        // console.log(html);
 
         const mailOptions = {
             from: 'natanoliveirati@gmail.com',
@@ -164,17 +144,43 @@ router.post('/forgot-password', async (req, res) => {
             html: html
         };
 
-        mailer.sendMail(mailOptions, function (error, info) {
-            if (error) {
-                console.error('Erro ao enviar e-mail:', error.response);
-                res.status(500).send({ error: 'Erro ao enviar e-mail.' });
-            } else {
-                // console.log('E-mail enviado:', info);
-                res.status(info.statusCode).send({ message: 'E-mail enviado com sucesso.' });
+        mailer.sendMail(mailOptions, function (err, info) {
+            if (err) {
+                console.error('Erro ao enviar e-mail:', err);
+                res.status(400).send({ message: 'Cannot send forgot password email' });
             }
+
+            res.status(200).send({ message: 'E-mail enviado com sucesso.' });
         });
 
+        // const dadosEnvio = {
+        //     subject: 'Redefinição de Senha',
+        //     greeting: `Olá! ${user.name}`,
+        //     message: `Você solicitou a redefinição de senha. Siga o link abaixo para redefinir sua senha. Token: ${token}`
+        // };
+
+        // const options = {
+        //     to: email,
+        //     from: mailerConfig.from,
+        //     subject: dadosEnvio.subject,
+        //     template: 'auth/forgot_password',
+        //     context: dadosEnvio
+        // }
+
+        // console.log(options)
+
+        // mailer.sendMail(options, function (err, info) {
+        //     if (err) {
+        //         console.error('Erro ao enviar e-mail:', err);
+        //         res.status(400).send({ message: 'Cannot send forgot password email' });
+        //     }
+
+        //     res.status(200).send({ message: 'E-mail enviado com sucesso.' });
+
+        // });
+
     } catch (error) {
+        console.log(error)
         res.status().send({ message: "Error on forgot password, try again." })
     }
 })
