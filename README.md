@@ -1,5 +1,5 @@
 
-# API Node com MongDB
+# API Node com MongoDB
 
 O projeto auth-node-mongo é uma aplicação Node.js para autenticação de usuários utilizando MongoDB como banco de dados. Esta versão do projeto é a 1.0.0.
 
