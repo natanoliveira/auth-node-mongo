@@ -16,16 +16,4 @@ const transport = nodemailer.createTransport({
     }
 })
 
-// Dados para umbler
-// const transport = nodemailer.createTransport({
-//     host: 'smtp.umbler.com',
-//     port: 587,
-//     auth: {
-//         user: 'noreply@natanoliveira.com.br',
-//         pass: 'Natan26@'
-//     }
-// })
-
-// console.log(transport);
-
 module.exports = transport
