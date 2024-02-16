@@ -21,3 +21,66 @@ O projeto auth-node-mongo é uma aplicação Node.js para autenticação de usu�
 - **Cors**: Middleware Express para habilitar o acesso de origens cruzadas (Cross-Origin Resource Sharing).
 - **jsonwebtoken**: Implementação de JSON Web Tokens para autenticação de usuários.
 - **bcryptjs**: Biblioteca para hash de senhas.
+
+## Variáveis de Ambiente
+
+Para rodar esse projeto, você vai precisar adicionar as seguintes variáveis de ambiente no seu .env na raiz do projeto
+
+`mongodb_user`
+
+`mongodb_password`
+
+`mongodb_database`
+
+`mongodb_cluster`
+
+
+## Outro arquivos a serem criados
+
+#### src/config/auth.json
+
+```http
+  // Exemplo de hash md5 para formar o jsonwebtoken
+  {
+    "secret":"24b73b213851993e900b2ebb45b1c81f"
+  }
+```
+
+#### src/config/mail.json
+
+```http
+  // Credenciais para envio de e-mail (forgot-password)
+  {
+    "host": "mail.seudominio.com.br",
+    "user": "no-reply@seudominio.com.br",
+    "pass": "senha-email",
+    "port": 465,
+    "from": "Nome Remetente <no-reply@seudominio.com.br>"
+}
+```
+
+## Rodando localmente
+
+Clone o projeto
+
+```bash
+  git clone https://github.com/natanoliveira/auth-node-mongo.git
+```
+
+Entre no diretório do projeto
+
+```bash
+  cd auth-node-mongo
+```
+
+Instale as dependências
+
+```bash
+  npm install
+```
+
+Inicie o servidor
+
+```bash
+  npm start
+```
